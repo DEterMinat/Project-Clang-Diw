@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// typedef ใช้เพื่อสร้างชื่อขึ้นมาใหม่สำหรับประเภทข้อมูลที่มีอยู่ ทำให้โปรแกรมเขียนได้สะดวกขึ้น
-// typedef ถูกใช้ร่วมกับ struct, มันสามารถช่วยให้เราสร้างประเภทข้อมูลใหม่
+
 typedef struct Node 
 
 {
@@ -12,21 +11,20 @@ typedef struct Node
     int year;
     int status;
     struct Node *next;
-} Node; // โครงสร้างที่ชื่อ Node เพื่อแทนหนังสือ มีข้อมูลเช่น id, title, author, year, status
+} Node; 
 
-//เลือกใช้ฟังก์ชั่น saveFile
+
 void saveFile(Node *head);
 
-//ฟังก์ชันที่ใช้ในการเพิ่มหนังสือใหม่
+
 void addBook(Node **head, int id, char *title, char *author, int year, int status)
 {
-    Node *newNode = (Node *)malloc(sizeof(Node)); // จะจองหน่วยความจำที่เพียงพอสำหรับโหนดใหม่ขนาดของ Node
-    if (!newNode)
+    Node *newNode = (Node *)malloc(sizeof(Node)); 
     {
         printf("Memory allocation failed.\n");
         exit(EXIT_FAILURE);
     }
-    // กำหนดค่าให้กับแต่ละสมาชิกในโหนดใหม่
+    
     newNode->id = id;
     strcpy(newNode->title, title);
     strcpy(newNode->author, author);
@@ -36,7 +34,7 @@ void addBook(Node **head, int id, char *title, char *author, int year, int statu
     *head = newNode;
     saveFile(*head);
 }
-// ฟังก์ชันที่ใช้ในการเอาหนังสือใหม่ออก
+
 void removeBook(Node **head, int id)
 {
     Node *temp = *head, *prev = NULL;
@@ -65,7 +63,7 @@ void removeBook(Node **head, int id)
     free(temp);
     saveFile(*head);
 }
-//ฟังก์ชั่นที่ใช้แก้ไขข้อมูล
+
 void modifyBook(Node *head, int id)
 {
     Node *temp = head;
@@ -96,7 +94,7 @@ void modifyBook(Node *head, int id)
 
     printf("No book with this id exists.\n");
 }
-//ฟังก์ชั่น เมื่อเรากรอกข้อมูลครบถ้วน จะดีดกลับมาหน้านี้
+
 void displayBooks(Node *head)
 {
     Node *temp = head;
@@ -113,13 +111,13 @@ void displayBooks(Node *head)
         temp = temp->next;
     }
 }
-//ฟังก์ชั่นที่จะ เซฟข้อมูลหลังจากกรอกข้อมูลเสร็จ
+
 void saveFile(Node *head)
 {
-    FILE *file; // เกี่ยวข้องกับการเปิด-ปิดไฟล์และการทำงานกับข้อมูลในไฟล์.
+    FILE *file; 
     Node *temp = head;
 
-    file = fopen("books.txt", "w"); // ช้ในการเปิดไฟล์
+    file = fopen("books.txt", "w"); 
     if (file == NULL)
     {
         printf("Could not open the file.\n");
@@ -133,14 +131,12 @@ void saveFile(Node *head)
     }
 
     fclose(file);
-} // ฟังก์ชันนี้รับตัวแปร head ของลิงก์ลิสต์เป็นพารามิเตอร์ และเขียนข้อมูลของแต่ละหนังสือในลิงก์ลิสต์ลงในไฟล์ที่ชื่อ "books.txt"
-
-//ประกาศข้อมูลลงในนี้ 
+} 
 int main()
 {
     Node *head = NULL;
     int choice;
-    while (1)//สร้างลูป (loop) โดยที่บริเวณที่ตั้งในวงเล็บ (1) จะมีเงื่อนไขที่รันคำสั่งswitch เสร็จจะกลับมาหน้า While
+    do
     {   
         printf("MENU BOOK\n");
         printf("1. Add Book\n");
@@ -151,7 +147,7 @@ int main()
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
-        switch (choice) // ทางเลือก (branching) ตามค่าของนิพจน์ ถ้าทำในส่วน 1 เสร็จ จะทำในส่วน 2 ต่อ ทำไปเรื่อยๆ จนกว่าจะเสร็จ
+        switch (choice) 
         {
         case 1:
         {
@@ -165,7 +161,7 @@ int main()
             scanf("%d", &id);
 
             printf("Enter title: ");
-            getchar(); // Consume the newline character left in the buffer
+            getchar(); 
             fgets(title, sizeof(title), stdin);
             title[strlen(title) - 1] = '\0';
 
@@ -213,5 +209,6 @@ int main()
             break;
         }
         }
-    }
+        return 0;
+    }while(choice != 0);
 }
